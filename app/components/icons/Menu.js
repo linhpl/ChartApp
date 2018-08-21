@@ -16,7 +16,7 @@ class MenuIcon extends Component {
     return (
       <TouchableOpacity
         style={styles.container}
-        onPress={() => navigation.openDrawer()}
+        // onPress={() => navigation.openDrawer()}
       >
         <Icon
           type="entypo"

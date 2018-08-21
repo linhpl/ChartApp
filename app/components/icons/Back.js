@@ -16,7 +16,7 @@ class BackIcon extends Component {
     return (
       <TouchableOpacity
         style={styles.container}
-        onPress={() => navigation.goBack(null)}
+        // onPress={() => navigation.goBack(null)}
       >
         <Icon
           type="ionicon"

@@ -15,12 +15,12 @@ class NotificationIcon extends Component {
     return (
       <TouchableOpacity
         style={styles.container}
-        onPress={() => navigation.navigate('notifications_screen')}
+        // onPress={() => navigation.navigate('notifications_screen')}
       >
         <Icon
           type="ionicon"
           name="md-notifications"
-          color="white"
+          color="#000066"
           size={24}
         />
       </TouchableOpacity>

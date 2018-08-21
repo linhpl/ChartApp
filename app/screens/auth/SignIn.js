@@ -7,7 +7,6 @@ import {
   ScrollView
 } from "react-native";
 import { Button, FormInput, Icon } from "react-native-elements";
-import axios from "axios";
 
 const styles = StyleSheet.create({
   container: {
@@ -78,15 +77,24 @@ class SignIn extends Component {
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      isKeep: false,
+      loading: false,
     };
     this.onChange = this.onChange.bind(this);
+    this.onPress = this.onPress.bind(this);
+    this.handleSignin = this.handleSignin.bind(this);
   }
   onChange(value) {
     this.setState(value);
   }
   onPress() {
-
+    this.setState({
+      loading: true,
+    }, () => this.handleSignin())
+  }
+  handleSignin() {
+    const { navigation } = this.props;
     const details = {
       'Object': "UserList",
       'Values': "'','',0",
@@ -115,14 +123,21 @@ class SignIn extends Component {
       })
       .then(data => {
         console.log(data);
+        this.setState({
+          loading: false,
+        });
+        navigation.navigate('home_screen');
       })
       .catch(error => {
         console.log(error);
+        this.setState({
+          loading: false,
+        });
       });
   }
+
   render() {
-    const { username, password } = this.state;
-    console.log("test state", this.state);
+    const { username, password, isKeep, loading } = this.state;
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <ScrollView contentContainerStyle={styles.contentContainerStyle}>
@@ -149,13 +164,18 @@ class SignIn extends Component {
               underlineColorAndroid="transparent"
             />
             <View style={styles.checkbox}>
-              <Icon name="checkbox-blank-outline" type="material-community" />
+              <Icon
+                name={isKeep ? "checkbox-marked" : "checkbox-blank-outline"}
+                type="material-community"
+                onPress={() => this.setState({ isKeep: !isKeep})}
+              />
               <Text style={styles.checkboxText}>Keep me logged in</Text>
             </View>
             <Button
               title="SIGN IN"
               buttonStyle={styles.button}
               onPress={this.onPress}
+              loading={loading}
             />
           </View>
         </ScrollView>
