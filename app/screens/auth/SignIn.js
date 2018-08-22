@@ -91,51 +91,8 @@ class SignIn extends Component {
   onPress() {
     this.setState({
       loading: true,
-    }, () => this.handleSignin())
-  }
-  handleSignin() {
-    const { navigation } = this.props;
-    const details = {
-      'Object': "UserList",
-      'Values': "'','',0",
-      'AuthKey': "E8383CE5-4C1A-4ABE-A9EE-3310614E2566",
-      'HostKey': "FBD0720D"
-    };
-
-    var formBody = [];
-    for (var property in details) {
-      var encodedKey = encodeURIComponent(property);
-      var encodedValue = encodeURIComponent(details[property]);
-      formBody.push(encodedKey + "=" + encodedValue);
-    }
-    formBody = formBody.join("&");
-
-    fetch('http://apiexpress.itpluspoint.com.au/api/rest/Invoke', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      body: formBody
     })
-      .then(response => {
-        console.log('res', response);
-        return response.json()
-      })
-      .then(data => {
-        console.log(data);
-        this.setState({
-          loading: false,
-        });
-        navigation.navigate('home_screen');
-      })
-      .catch(error => {
-        console.log(error);
-        this.setState({
-          loading: false,
-        });
-      });
   }
-
   render() {
     const { username, password, isKeep, loading } = this.state;
     return (
