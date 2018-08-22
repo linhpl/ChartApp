@@ -6,6 +6,7 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       data: '',
     };
     this.handleData = this.handleData.bind(this);
@@ -42,17 +43,22 @@ class Home extends Component {
         console.log(data);
         this.setState({
           data: JSON.stringify(data),
+          loading: false,
         });
       })
       .catch(error => {
         console.log(error);
+        this.setState({
+          loading: false,
+        });
       });
   }
   render() {
+    const { loading, data } = this.state;
     return (
       <ScrollView>
-        <Text>{this.state.data}</Text>
-        <Button onPress={() => this.props.navigation.navigate('sign_in_screen')} title="Sign In"/>
+        {loading ? <Text>loading...</Text> : <Text>{data}</Text>}
+        <Button onPress={() => this.props.navigation.navigate('sign_in_screen')} title="Logout"/>
       </ScrollView>
     )
   }

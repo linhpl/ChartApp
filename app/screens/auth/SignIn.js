@@ -69,6 +69,9 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 10,
     fontSize: 12
+  },
+  errorText: {
+    color: 'red',
   }
 });
 
@@ -80,18 +83,36 @@ class SignIn extends Component {
       password: "",
       isKeep: false,
       loading: false,
+      error: ''
     };
     this.onChange = this.onChange.bind(this);
+    this.handleSignin = this.handleSignin.bind(this);
     this.onPress = this.onPress.bind(this);
   }
   onChange(value) {
     this.setState(value);
   }
+  handleSignin() {
+    this.setState({
+      loading: true,
+    }, () => this.onPress())
+  }
   onPress() {
-    this.props.navigation.navigate('home_screen')
+    const { username, password } = this.state;
+    if ( username === 'admin' && password === '123456') {
+      this.setState({
+        loading: false,
+      });
+      this.props.navigation.navigate('home_screen');
+    } else {
+      this.setState({
+        loading: false,
+        error: 'Username or password fail! Please check again',
+      });
+    }
   }
   render() {
-    const { username, password, isKeep, loading } = this.state;
+    const { username, password, isKeep, loading, error } = this.state;
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <ScrollView contentContainerStyle={styles.contentContainerStyle}>
@@ -106,6 +127,7 @@ class SignIn extends Component {
               containerStyle={styles.containerStyle}
               inputStyle={styles.inputStyle}
               underlineColorAndroid="transparent"
+              autoCapitalize="none"
             />
             <Text style={styles.labelInput}>Password</Text>
             <FormInput
@@ -116,6 +138,7 @@ class SignIn extends Component {
               inputStyle={styles.inputStyle}
               secureTextEntry
               underlineColorAndroid="transparent"
+              autoCapitalize="none"
             />
             <View style={styles.checkbox}>
               <Icon
@@ -128,9 +151,10 @@ class SignIn extends Component {
             <Button
               title="SIGN IN"
               buttonStyle={styles.button}
-              onPress={this.onPress}
+              onPress={this.handleSignin}
               loading={loading}
             />
+            {error.length > 0 && <Text style={styles.errorText}>{error}</Text>}
           </View>
         </ScrollView>
         <View style={styles.footer}>
