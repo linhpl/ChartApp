@@ -83,15 +83,12 @@ class SignIn extends Component {
     };
     this.onChange = this.onChange.bind(this);
     this.onPress = this.onPress.bind(this);
-    this.handleSignin = this.handleSignin.bind(this);
   }
   onChange(value) {
     this.setState(value);
   }
   onPress() {
-    this.setState({
-      loading: true,
-    })
+    this.props.navigation.navigate('home_screen')
   }
   render() {
     const { username, password, isKeep, loading } = this.state;
