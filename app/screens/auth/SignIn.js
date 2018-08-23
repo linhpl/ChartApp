@@ -79,37 +79,64 @@ class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      password: "",
+      username: "barik.subrat@rocketmail.com",
+      password: "subrat123",
       isKeep: false,
       loading: false,
       error: ''
     };
     this.onChange = this.onChange.bind(this);
     this.handleSignin = this.handleSignin.bind(this);
-    this.onPress = this.onPress.bind(this);
   }
   onChange(value) {
     this.setState(value);
   }
   handleSignin() {
+
     this.setState({
-      loading: true,
-    }, () => this.onPress())
-  }
-  onPress() {
+        loading: true,
+    });
+
+    const { navigation } = this.props;
     const { username, password } = this.state;
-    if ( username === 'admin' && password === '123456') {
-      this.setState({
-        loading: false,
-      });
-      this.props.navigation.navigate('home_screen');
-    } else {
-      this.setState({
-        loading: false,
-        error: 'Username or password fail! Please check again',
-      });
+    const details = {
+      'Object': "UserList",
+      'Values': `'${username}','${password}',0`,
+      'AuthKey': "E8383CE5-4C1A-4ABE-A9EE-3310614E2566",
+      'HostKey': "FBD0720D"
+    };
+
+    var formBody = [];
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
     }
+    formBody = formBody.join("&");
+
+    fetch('http://apiexpress.itpluspoint.com.au/api/rest/Invoke', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: formBody
+    })
+      .then(response => {
+        console.log('res', response);
+        return response.json()
+      })
+      .then(data => {
+        this.setState({
+          loading: false,
+        });
+        navigation.navigate('home_screen');
+      })
+      .catch(error => {
+        this.setState({
+          loading: false,
+          error: 'Username or password fail! Please check again',
+        });
+      });
   }
   render() {
     const { username, password, isKeep, loading, error } = this.state;
